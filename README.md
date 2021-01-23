@@ -17,8 +17,8 @@ sh <(curl -s https://smartpy.io/cli/install.sh)
 
 ```sh
 # test fishcake contract
-~/smartpy-cli/SmartPy.sh test contracts/fishcake.py contracts/test
+~/smartpy-cli/SmartPy.sh test contracts/fishcake.py contracts/test-tmp
 
 # test fishcake box contract
-~/smartpy-cli/SmartPy.sh test contracts/fishcakeBox.py contracts/test
+~/smartpy-cli/SmartPy.sh test contracts/fishcakeBox.py contracts/test-tmp
 ```

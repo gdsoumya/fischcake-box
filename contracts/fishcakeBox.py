@@ -86,7 +86,7 @@ def test():
         == 7000)
     scenario.verify(
         c1.data.ledger[c1.ledger_key.make(c2.address, 0)].balance
-        == 300)
+        == 3000)
     scenario.h2("Redeem Tokens from Fishcake Box")
     scenario.h3("Successful Redeem")
     scenario += c2.redeem().run(sender=alice)

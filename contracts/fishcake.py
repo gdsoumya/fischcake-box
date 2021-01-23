@@ -431,6 +431,7 @@ def mutez_transfer(contract, params):
     sp.set_type(params.destination, sp.TAddress)
     sp.set_type(params.amount, sp.TMutez)
     sp.send(params.destination, params.amount)
+
 ##
 # The `FA2` class builds a contract according to an `FA2_config` and an
 # administrator address.
@@ -634,9 +635,8 @@ class FA2_token_metadata(FA2_core):
             sp.result(self.data.tokens[req])
         sp.compute(params.handler(params.token_ids.map(f_on_request)))
 
+
 # returns the FA2 config for FishCake token
-
-
 def getFishcakeConfig():
     return FA2_config(
         debug_mode=False,
@@ -651,9 +651,8 @@ def getFishcakeConfig():
         lazy_entry_points=False,
         lazy_entry_points_multiple=False)
 
+
 # Fishcake Token Contract
-
-
 class Fishcake(FA2_token_metadata, FA2_administrator, FA2_pause, FA2_core):
     def __init__(self, admin, supply):
         config = getFishcakeConfig()
