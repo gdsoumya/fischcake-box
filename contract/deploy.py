@@ -5,11 +5,11 @@ from pytezos import Contract, pytezos
 from pytezos.michelson.micheline import michelson_to_micheline
 
 # constants
-default_rpc = "delphinet"
-default_pk = ""
-default_supply = 100000
-default_redeem_amt = 100
-default_fsck_box_fund = 10000
+default_rpc = "delphinet"  # rpc address or pytezos network name
+default_pk = ""  # your tezos account private keys
+default_supply = 100000  # total Fishcake Token supply
+default_redeem_amt = 100  # constant redeem amount for the Fishcake Box
+default_fsck_box_fund = 10000  # initial tokens funded to Fishcake Box
 
 
 pytezos = pytezos.using(shell=default_rpc, key=default_pk)
