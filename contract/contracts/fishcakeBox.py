@@ -1,7 +1,7 @@
 import smartpy as sp
 
 FA2 = sp.import_script_from_url(
-    "file:./contracts/fishcake.py", name="Fishcake")
+    "file:./contract/contracts/fishcake.py", name="Fishcake")
 
 
 class FishcakeBox(sp.Contract):
@@ -22,32 +22,30 @@ class FishcakeBox(sp.Contract):
                                                                             token_id=0)])]
         sp.transfer(payload, sp.mutez(0), contract)
 
-    @sp.view(sp.TRecord(address=sp.TAddress, redeemed=sp.TBool))
+    @sp.view(sp.TBool)
     def hasRedeemed(self, address):
         sp.if self.data.users.contains(address):
-            sp.result(sp.record(address=address, redeemed=True))
+            sp.result(True)
         sp.else:
-            sp.result(sp.record(address=address, redeemed=False))
+            sp.result(False)
 
 
 class TestConsumer(sp.Contract):
     def __init__(self, address):
-        self.init(contract=address, redeemList=sp.big_map(
-            tkey=sp.TAddress, tvalue=sp.TBool))
-        self.callbackType = sp.TRecord(address=sp.TAddress, redeemed=sp.TBool)
+        self.init(contract=address, redeemed=False)
 
     @sp.entry_point
     def callback(self, params):
-        sp.set_type(params, self.callbackType)
-        self.data.redeemList[params.address] = params.redeemed
+        sp.set_type(params, sp.TBool)
+        self.data.redeemed = params
 
     @sp.entry_point
     def checkRedeem(self, address):
         sp.set_type(address, sp.TAddress)
         contract = sp.contract(sp.TPair(sp.TAddress, sp.TContract(
-            self.callbackType)), self.data.contract, entry_point="hasRedeemed").open_some()
+            sp.TBool)), self.data.contract, entry_point="hasRedeemed").open_some()
         payload = sp.pair(address, sp.contract(
-            self.callbackType, sp.self_address, entry_point="callback").open_some())
+            sp.TBool, sp.self_address, entry_point="callback").open_some())
         sp.transfer(payload, sp.mutez(0), contract)
 
 
@@ -113,17 +111,13 @@ def test():
     scenario += consumer
     scenario += consumer.checkRedeem(alice.address)
     scenario.verify(
-        consumer.data.redeemList[alice.address]
-        == True)
+        consumer.data.redeemed == True)
     scenario += consumer.checkRedeem(bob.address)
     scenario.verify(
-        consumer.data.redeemList[bob.address]
-        == True)
+        consumer.data.redeemed == True)
     scenario += consumer.checkRedeem(jack.address)
     scenario.verify(
-        consumer.data.redeemList[jack.address]
-        == True)
+        consumer.data.redeemed == True)
     scenario += consumer.checkRedeem(admin.address)
     scenario.verify(
-        consumer.data.redeemList[admin.address]
-        == False)
+        consumer.data.redeemed == False)

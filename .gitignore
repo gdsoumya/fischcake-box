@@ -1,1 +1,6 @@
 test-tmp/
+build/
+node_modules/
+*.js
+*.json
+contracts/deploy.py
