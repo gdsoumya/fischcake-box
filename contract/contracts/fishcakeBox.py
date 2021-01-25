@@ -105,7 +105,7 @@ def test():
     scenario.p("Insufficient Balance of Fishcake Box")
     scenario += c2.redeem().run(sender=jack)
     # smartpy currently cannot handle recursive errors hence this test case has been commented
-    # scenario += c2.redeem().run(sender=admin, valid=True)
+    # scenario += c2.redeem().run(sender=admin, valid=False)
     scenario.h2("Calling View")
     consumer = TestConsumer(c2.address)
     scenario += consumer
