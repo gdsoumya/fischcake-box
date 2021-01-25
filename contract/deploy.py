@@ -13,10 +13,13 @@ default_fsck_box_fund = 10000  # initial tokens funded to Fishcake Box
 
 
 pytezos = pytezos.using(shell=default_rpc, key=default_pk)
-pub_key_hash = pytezos.key.public_key_hash()
+pub_key_hash = pytezos.key.public_key_hash()  # tezos address
 
 
 def compile_contract(file: str, class_call: str) -> str:
+    """
+    Compile SmartPy contract in the file using the specified class call
+    """
     print(f"Compiling {file}.py ....")
     exit_code = os.system(
         f"~/smartpy-cli/SmartPy.sh compile contract/contracts/{file}.py \"{class_call}\" contract/build")
@@ -25,6 +28,9 @@ def compile_contract(file: str, class_call: str) -> str:
 
 
 def deploy(file: str) -> None:
+    """
+    Deploy the compiled contract in the file
+    """
     print(f"Deploying {file}.py ....")
     contract = Contract.from_file(f"contract/build/{file}_compiled.tz")
     contract_storage = {}
@@ -38,6 +44,10 @@ def deploy(file: str) -> None:
 
 
 def setup(token_addr: str, box_addr: str) -> None:
+    """
+    Setup the contracts, perform initial mint of FSCK tokens and 
+    fund the fishcake box contract
+    """
     print(f"\nSetting up Contracts....")
     tokenContract = pytezos.contract(token_addr)
     print(f"-- Performing Initial Mint to Admin : {pub_key_hash}")
@@ -48,6 +58,9 @@ def setup(token_addr: str, box_addr: str) -> None:
 
 
 def init():
+    """
+    Main function that compiles, deploys and configures the contracts
+    """
     try:
         compile_contract(
             "fishcake", f"Fishcake(sp.address('{pub_key_hash}'),{default_supply})")
@@ -64,4 +77,5 @@ def init():
         print("Failed to originate Contracts : ", e)
 
 
-init()
+if __name__ == '__main__':
+    init()

@@ -1,11 +1,37 @@
 # Fishcake Box
 
-## Requirements
+## Setup
 
-1. Python 3
-2. pytezos [pip install pytezos]
+This section guides you how to setup your env to run the scripts in this repository
 
-These scripts have been tested on **Ubuntu 20.10**
+[*] These scripts have been tested on **Ubuntu 20.10**
+
+### Requirements
+
+1. Python 3.8
+2. virtualenv
+
+### Clone Repo
+
+```sh
+git clone https://github.com/gdsoumya/fischcake-box
+
+cd fischcake-box
+```
+
+### Create Virtual Env
+
+```sh
+virtualenv env
+
+source env/bin/activate
+```
+
+### Install Requirements
+
+```sh
+pip install -r requirements
+```
 
 ## Contracts
 
@@ -14,7 +40,7 @@ There are 2 contracts :
 1. Fishcake Token : This is a FA2 contract that uses a modified version of the [FA2 smartpy template](https://smartpy.io/ide?template=FA2.py)
 2. Fishcake Box : This contract enables users to redeem a fixed amount of `Fishcake Tokens`
 
-### Setup SmartPy CLI
+### Setup SmartPy CLI [REQUIRED]
 
 ```sh
 sh <(curl -s https://smartpy.io/cli/install.sh)
@@ -24,10 +50,10 @@ sh <(curl -s https://smartpy.io/cli/install.sh)
 
 ```sh
 # test fishcake contract
-~/smartpy-cli/SmartPy.sh test contracts/fishcake.py contracts/test-tmp
+~/smartpy-cli/SmartPy.sh test contract/contracts/fishcake.py contract/test-tmp
 
 # test fishcake box contract
-~/smartpy-cli/SmartPy.sh test contracts/fishcakeBox.py contracts/test-tmp
+~/smartpy-cli/SmartPy.sh test contract/contracts/fishcakeBox.py contract/test-tmp
 ```
 
 ### Deploy Contracts
@@ -56,3 +82,41 @@ It will deploy the contracts and perform the necessary txs after which it will d
 -- Fishcake Token Address : KT1....
 -- Fishcake Box Address : KT1....
 ```
+
+## CLI
+
+The CLI uses these default values :
+
+```
+default_rpc = "delphinet"  # rpc address or pytezos network name
+default_fsck_box_addr = "KT18mmFJu1vKN91ko8MmnvSW8kf8CstM7H4g"
+default_fsck_token_addr = "KT1NdiBZcHJ6KxqTjkCztWXJw9VCZAxLzJUM"
+```
+
+The above can be configured by passing the required setting :
+
+```sh
+python cli/cli.py --help
+
+Usage: cli.py [OPTIONS] COMMAND [ARGS]...
+
+  CLI group
+
+Options:
+  --rpc <rpc-address>             rpc node to use
+  --fishcake-box <contract-addr>  fishcake box contract address
+  --fishcake-token <contract-addr>
+                                  fishcake token contract address
+  --help                          Show this message and exit.
+
+Commands:
+  has-redeemed    Check if user has redeemed tokens from Fishcake Box or not...
+  token-balance   Check how many Fishcake Tokens user has ADDRESS is the...
+  total-redeemed  Check the total redeemed tokens from Fishcake Box
+```
+
+The CLI util has 3 commands:
+
+1. `total-redeemed` : This shows the total tokens redeemed from fishcake box contract
+2. `has-redeemed` : This command takes the user address as an argument and shows whether the user has redeemed the token from fishcake box
+3. `token-balance` : This command takes the user address as an argument and shows their fishcake token balance
